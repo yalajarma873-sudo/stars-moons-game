@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>نجوم وأقمار ⭐🌙</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f4f4f5;margin:0;padding:24px;color:#18181b}
+.game{max-width:650px;margin:auto;background:white;border:1px solid #ddd;border-radius:18px;padding:20px}
+h1{margin:0 0 6px}.sub{color:#666}.stats{display:flex;gap:10px;margin:15px 0}.stat{border:1px solid #ddd;border-radius:10px;padding:10px;flex:1;text-align:center}.stat b{display:block;font-size:22px}
+.panel{border:1px solid #ddd;border-radius:14px;padding:15px;margin-top:12px}.rules{display:flex;gap:8px;flex-wrap:wrap}.rule{background:#f4f4f5;padding:8px;border-radius:8px}
+form{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}input{flex:1;min-width:180px;padding:12px;font-size:22px;text-align:center;letter-spacing:6px;border:1px solid #bbb;border-radius:10px}button{padding:12px 16px;border:1px solid #bbb;border-radius:10px;background:#fff;font-weight:bold;cursor:pointer}
+.message{margin-top:12px;font-weight:bold;min-height:22px}.row{display:grid;grid-template-columns:1fr auto auto;gap:8px;border:1px solid #ddd;padding:10px;border-radius:9px;margin-top:8px}.guess{font-size:19px;font-weight:bold;letter-spacing:4px}
+.secret{text-align:center;font-size:30px;font-weight:bold;letter-spacing:8px;margin-top:8px}
+@media(max-width:500px){.row{grid-template-columns:1fr}.game{padding:14px}button{width:100%}}
+</style>
+</head>
+<body>
+<div class="game">
+<h1>⭐ نجوم وأقمار 🌙</h1>
+<div class="sub">اكتشف الرقم السري المكوّن من 4 أرقام مختلفة!</div>
+<div class="stats"><div class="stat"><b id="attempts">0</b>المحاولات</div><div class="stat"><b>4</b>أرقام</div></div>
+<div class="panel">
+<div class="rules"><div class="rule">⭐ صحيح ومكانه صحيح</div><div class="rule">🌙 صحيح ومكانه خاطئ</div><div class="rule">❌ غير موجود</div></div>
+<form id="form"><input id="guess" inputmode="numeric" maxlength="4" placeholder="____" aria-label="التخمين"><button type="submit">خَمِّن 🎯</button><button id="new" type="button">لعبة جديدة 🔄</button></form>
+<div id="msg" class="message">ابدأ بتخمين 4 أرقام مختلفة.</div>
+</div>
+<div id="result" class="panel" hidden><div id="win" class="message"></div><div id="secret" class="secret"></div></div>
+<div class="panel"><b>سجل المحاولات</b><div id="history"><div class="sub">ستظهر تخميناتك هنا.</div></div></div>
+</div>
+<script>
+(()=>{const g=document.getElementById('guess'),f=document.getElementById('form'),n=document.getElementById('new'),m=document.getElementById('msg'),h=document.getElementById('history'),a=document.getElementById('attempts'),r=document.getElementById('result'),w=document.getElementById('win'),s=document.getElementById('secret');let sec='',att=0,done=false;
+function make(){let d='0123456789'.split(''),o='';while(o.length<4){let i=Math.floor(Math.random()*d.length);o+=d.splice(i,1)[0]}return o}
+function reset(){sec=make();att=0;done=false;a.textContent='0';g.disabled=false;g.value='';m.textContent='ابدأ بتخمين 4 أرقام مختلفة.';h.innerHTML='<div class="sub">ستظهر تخميناتك هنا.</div>';r.hidden=true;g.focus()}
+function add(x,st,mo){if(h.children.length===1)h.innerHTML='';let q=document.createElement('div');q.className='row';q.innerHTML='<span class="guess"></span><span>⭐ '+st+'</span><span>🌙 '+mo+'</span>';q.querySelector('.guess').textContent=x;h.prepend(q)}
+f.addEventListener('submit',e=>{e.preventDefault();if(done)return;let x=g.value.trim();if(!/^\d{4}$/.test(x)){m.textContent='❌ أدخل 4 أرقام بالضبط.';return}if(new Set(x).size!==4){m.textContent='❌ لا تكرر الأرقام.';return}att++;let st=0,mo=0;for(let i=0;i<4;i++){if(x[i]===sec[i])st++;else if(sec.includes(x[i]))mo++}a.textContent=att;add(x,st,mo);if(st===4){done=true;g.disabled=true;m.textContent='🎉 مبروك! اكتشفت الرقم السري!';w.textContent='🏆 فوز! عدد المحاولات: '+att;s.textContent=sec;r.hidden=false}else m.textContent='نتيجتك: ⭐ '+st+' و 🌙 '+mo+'. حاول مرة أخرى!';g.value='';g.focus()});
+g.addEventListener('input',()=>g.value=g.value.replace(/\D/g,'').slice(0,4));n.addEventListener('click',reset);reset()})();
+</script>
+</body>
+</html>
